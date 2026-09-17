@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700" role="img"
+     aria-label="交互面板状态机：三个按键分别改动光标变量 Key_state 与确认变量 Key_con，每个面板运行在一次循环内；默认界面与菜单界面互为出入口，菜单界面按 Key_state 分叉到设置界面与调试界面">
+  <defs>
+    <style><![CDATA[
+      :root{
+        --bg:#f7f9fc; --card:#ffffff; --line:#dbe3ec; --ink:#1f2d3a; --sub:#6b7a8d;
+        --accent:#2f9e8f; --accent-soft:#e8f5f2; --key2:#2f9e8f;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#141a21; --card:#1c2530; --line:#2c3a48; --ink:#e6edf3; --sub:#8b9bab;
+          --accent:#4fc3b0; --accent-soft:#1b3330; --key2:#328a7e;
+        }
+      }
+      text{ font-family: system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; fill: var(--ink); }
+      .mono{ font-family: ui-monospace,SFMono-Regular,Consolas,"Cascadia Mono","Microsoft YaHei",monospace; }
+      .bg{ fill: var(--bg); }
+      .card{ fill: var(--card); stroke: var(--line); stroke-width: 1; }
+      .hub{ fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+      .panel{ fill: var(--card); stroke: var(--line); stroke-width: 1; }
+      .keyt{ fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.2; }
+      .key2{ fill: var(--key2); }
+      .ktext{ font-size: 11px; font-weight: 600; fill: var(--accent); }
+      .ktext2{ font-size: 11px; font-weight: 600; fill: #ffffff; }
+      .name{ font-size: 16px; font-weight: 600; }
+      .name-sm{ font-size: 14px; font-weight: 600; }
+      .code{ font-size: 11.5px; }
+      .cap{ font-size: 11px; fill: var(--sub); }
+      .tiny{ font-size: 10px; fill: var(--sub); }
+      .lead{ font-size: 11px; fill: var(--sub); letter-spacing: .12em; }
+      .link{ fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .head{ fill: var(--accent); }
+      .dot{ fill: var(--accent); }
+    ]]></style>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#0f2233" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="700"/>
+
+  <text class="lead" x="32" y="34">Panel State Machine</text>
+  <text x="32" y="20" style="font-size:15px;font-weight:600">交 互 面 板 状 态 机</text>
+
+  <!-- ==================== 按键如何驱动面板 ==================== -->
+  <rect class="panel" x="32" y="56" width="836" height="132" rx="14" filter="url(#sh)"/>
+  <text class="cap" x="56" y="76">按键中断只改两个变量</text>
+
+  <rect class="keyt" x="56" y="86" width="64" height="26" rx="7"/>
+  <text class="ktext" x="88" y="103" text-anchor="middle">Key1</text>
+  <text class="mono" x="134" y="103" style="font-size:12px">PB0 → Key_state + 1</text>
+  <text class="tiny" x="500" y="103" text-anchor="end">光标下移一位</text>
+
+  <rect class="keyt" x="56" y="120" width="64" height="26" rx="7"/>
+  <text class="ktext" x="88" y="137" text-anchor="middle">Key3</text>
+  <text class="mono" x="134" y="137" style="font-size:12px">PA4 → Key_state − 1</text>
+  <text class="tiny" x="500" y="137" text-anchor="end">光标上移一位</text>
+
+  <rect class="key2" x="56" y="154" width="64" height="26" rx="7"/>
+  <text class="ktext2" x="88" y="171" text-anchor="middle">Key2</text>
+  <text class="mono" x="134" y="171" style="font-size:12px">PA6 → Key_con = 1</text>
+  <text class="tiny" x="500" y="171" text-anchor="end">确认并退出面板</text>
+
+  <path class="link" d="M516 123 H570"/>
+  <polygon class="head" points="580,123 570,118.5 570,127.5"/>
+
+  <rect class="card" x="580" y="90" width="270" height="66" rx="10"/>
+  <text class="mono" x="598" y="118" style="font-size:12px">while (Key_con == 0)</text>
+  <text class="cap" x="598" y="140">面板内交互与显示刷新</text>
+
+  <text class="cap" x="32" y="212">下面每个面板都运行在一次这样的循环内，退出循环后才统一执行跳转</text>
+
+  <!-- ==================== 默认界面 ==================== -->
+  <rect class="card" x="350" y="228" width="200" height="88" rx="12" filter="url(#sh)"/>
+  <text class="name" x="450" y="256" text-anchor="middle">默认界面</text>
+  <text class="mono tiny" x="450" y="275" text-anchor="middle">showUI_UInum = 1</text>
+  <text class="tiny" x="450" y="293" text-anchor="middle">运行时间 · 温湿度 · 开关状态</text>
+
+  <path class="link" d="M450 316 V352"/>
+  <polygon class="head" points="450,316 445.5,326 454.5,326"/>
+  <polygon class="head" points="450,360 445.5,350 454.5,350"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M450 318 L450 358" dur="2.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="2.4s" repeatCount="indefinite"/>
+  </circle>
+  <text class="cap" x="470" y="343">Key_state = 1 · 双向</text>
+
+  <!-- ==================== 菜单界面 ==================== -->
+  <rect class="hub" x="350" y="360" width="200" height="84" rx="12" filter="url(#sh)"/>
+  <text class="name" x="450" y="388" text-anchor="middle">菜单界面</text>
+  <text class="mono tiny" x="450" y="407" text-anchor="middle">menuUI_UInum = 255</text>
+  <text class="tiny" x="450" y="425" text-anchor="middle">主要菜单 · 相关设置 · 调试界面</text>
+
+  <path class="link" d="M372 444 V472 H150 V496"/>
+  <polygon class="head" points="150,504 145.5,494 154.5,494"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M372 444 V472 H150 V502" dur="2.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="2.6s" repeatCount="indefinite"/>
+  </circle>
+  <text class="cap" x="196" y="466">Key_state = 2 · 相关设置</text>
+
+  <path class="link" d="M528 444 V472 H750 V496"/>
+  <polygon class="head" points="750,504 745.5,494 754.5,494"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M528 444 V472 H750 V502" dur="2.6s" repeatCount="indefinite" begin="1.3s"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="2.6s" repeatCount="indefinite" begin="1.3s"/>
+  </circle>
+  <text class="cap" x="596" y="466">Key_state = 3 · 调试界面</text>
+
+  <!-- ==================== 两个叶子界面 ==================== -->
+  <rect class="card" x="50" y="504" width="200" height="76" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="150" y="530" text-anchor="middle">设置界面</text>
+  <text class="mono tiny" x="150" y="549" text-anchor="middle">setUI_UInum = 2</text>
+  <text class="tiny" x="150" y="567" text-anchor="middle">树形二级菜单</text>
+
+  <rect class="card" x="650" y="504" width="200" height="76" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="750" y="530" text-anchor="middle">调试界面</text>
+  <text class="mono tiny" x="750" y="549" text-anchor="middle">configUI_UInum = 3</text>
+  <text class="tiny" x="750" y="567" text-anchor="middle">声音输入 · ADC 波形</text>
+
+  <!-- ==================== 二级结构 ==================== -->
+  <rect class="panel" x="32" y="596" width="420" height="76" rx="12"/>
+  <text class="cap" x="52" y="620">设置界面 · 二级菜单（prev / next 首尾相接）</text>
+  <text class="tiny" x="52" y="642">模式选择 → 互补输出 → 频率控制 → 背景音</text>
+  <text class="tiny" x="52" y="660">背景音下含：自动设置 / 阈值设置 / 灵敏度</text>
+
+  <rect class="panel" x="490" y="596" width="378" height="76" rx="12"/>
+  <text class="cap" x="510" y="620">调试界面 · 二级页面</text>
+  <text class="tiny" x="510" y="642">声音输入 → ADC 数值显示 ⇄ ADC 波形显示</text>
+  <text class="mono tiny" x="510" y="660">ADUI = 253 / ADSHOWUI = 254</text>
+</svg>

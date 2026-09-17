@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" width="900" height="440" role="img"
+     aria-label="供电结构：5V Type-C 输入经电源扩展模块输出 20V、12V 左右、5V、3V3 四条电压轨道">
+  <defs>
+    <style><![CDATA[
+      :root{
+        --bg:#f7f9fc; --card:#ffffff; --line:#dbe3ec; --ink:#1f2d3a; --sub:#6b7a8d; --accent:#2f9e8f;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#141a21; --card:#1c2530; --line:#2c3a48; --ink:#e6edf3; --sub:#8b9bab; --accent:#4fc3b0;
+        }
+      }
+      text{ font-family: system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; fill: var(--ink); }
+      .mono{ font-family: ui-monospace,SFMono-Regular,Consolas,"Cascadia Mono",monospace; }
+      .bg{ fill: var(--bg); }
+      .card{ fill: var(--card); stroke: var(--line); stroke-width: 1; }
+      .name{ font-size: 17px; font-weight: 600; }
+      .cap{ font-size: 11px; fill: var(--sub); }
+      .lead{ font-size: 11px; fill: var(--sub); letter-spacing: .12em; }
+      .v{ font-size: 15px; font-weight: 600; fill: var(--accent); }
+      .link{ fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+      .head{ fill: var(--accent); }
+      .rail{ fill: none; stroke: var(--accent); stroke-linecap: round; stroke-linejoin: round; }
+      .r1{ stroke-width: 8;  opacity: 1; }
+      .r2{ stroke-width: 6;  opacity: .80; }
+      .r3{ stroke-width: 5;  opacity: .66; }
+      .r4{ stroke-width: 4;  opacity: .52; }
+      .d1{ fill: var(--accent); opacity: 1; }
+      .d2{ fill: var(--accent); opacity: .80; }
+      .d3{ fill: var(--accent); opacity: .66; }
+      .d4{ fill: var(--accent); opacity: .52; }
+      .node{ fill: var(--card); stroke: var(--accent); stroke-width: 2.5; }
+    ]]></style>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#0f2233" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="440"/>
+
+  <text class="lead" x="32" y="34">Power Rails</text>
+  <text x="32" y="20" style="font-size:15px;font-weight:600">供 电 结 构</text>
+
+  <!-- 输入 -->
+  <rect class="card" x="32" y="165" width="170" height="90" rx="12" filter="url(#sh)"/>
+  <text class="name" x="117" y="200" text-anchor="middle">5V 输入</text>
+  <text class="cap" x="117" y="222" text-anchor="middle">Type-C 供电</text>
+
+  <path class="link" d="M202 210 H242"/>
+  <polygon class="head" points="250,210 241,205.5 241,214.5"/>
+
+  <!-- 电源扩展 -->
+  <rect class="card" x="250" y="165" width="180" height="90" rx="12" filter="url(#sh)"/>
+  <text class="name" x="340" y="200" text-anchor="middle">电源扩展</text>
+  <text class="cap" x="340" y="222" text-anchor="middle">升压 / 降压</text>
+
+  <!-- 20V -->
+  <path class="rail r1" d="M430 180 H470 V100 H790"/>
+  <circle class="node" cx="790" cy="100" r="6"/>
+  <circle class="d1" r="4.5">
+    <animateMotion path="M430 180 H470 V100 H790" dur="5.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="5.5s" repeatCount="indefinite"/>
+  </circle>
+  <text class="v" x="482" y="88">20V</text>
+
+  <!-- 12V -->
+  <path class="rail r2" d="M430 195 H500 V180 H790"/>
+  <circle class="node" cx="790" cy="180" r="5.5"/>
+  <circle class="d2" r="4">
+    <animateMotion path="M430 195 H500 V180 H790" dur="4.7s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="4.7s" repeatCount="indefinite"/>
+  </circle>
+  <text class="v" x="512" y="168">12V 左右</text>
+
+  <!-- 5V -->
+  <path class="rail r3" d="M430 210 H530 V260 H790"/>
+  <circle class="node" cx="790" cy="260" r="5"/>
+  <circle class="d3" r="4">
+    <animateMotion path="M430 210 H530 V260 H790" dur="5.1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="5.1s" repeatCount="indefinite"/>
+  </circle>
+  <text class="v" x="542" y="248" style="opacity:.66">5V</text>
+
+  <!-- 3V3 -->
+  <path class="rail r4" d="M430 225 H560 V340 H790"/>
+  <circle class="node" cx="790" cy="340" r="5"/>
+  <circle class="d4" r="4">
+    <animateMotion path="M430 225 H560 V340 H790" dur="5.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="5.5s" repeatCount="indefinite"/>
+  </circle>
+  <text class="v" x="572" y="328" style="opacity:.52">3V3</text>
+
+  <text class="cap" x="32" y="412">由 5V Type-C 输入扩展出的四条电压轨道，线宽表示输出功率量级</text>
+</svg>

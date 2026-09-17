@@ -7,3 +7,5 @@
 !*.h
 !*.s
 !*.uvprojx
+!*.svg
+!*.png

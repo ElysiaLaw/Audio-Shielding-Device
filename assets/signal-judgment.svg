@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" width="900" height="680" role="img"
+     aria-label="声音判定流程：取采样值、算阈值、剔除忽略区间、环形滑窗统计有效占比、按总开关与模式决策、最后控制 PWM 输出">
+  <defs>
+    <style><![CDATA[
+      :root{
+        --bg:#f7f9fc; --card:#ffffff; --line:#dbe3ec; --ink:#1f2d3a; --sub:#6b7a8d;
+        --accent:#2f9e8f; --accent-soft:#e8f5f2;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#141a21; --card:#1c2530; --line:#2c3a48; --ink:#e6edf3; --sub:#8b9bab;
+          --accent:#4fc3b0; --accent-soft:#1b3330;
+        }
+      }
+      text{ font-family: system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; fill: var(--ink); }
+      .mono{ font-family: ui-monospace,SFMono-Regular,Consolas,"Cascadia Mono","Microsoft YaHei",monospace; }
+      .bg{ fill: var(--bg); }
+      .card{ fill: var(--card); stroke: var(--line); stroke-width: 1; }
+      .badge{ fill: var(--accent-soft); }
+      .bnum{ font-size: 14px; font-weight: 600; fill: var(--accent); }
+      .main{ font-size: 14px; }
+      .sub{ font-size: 10.5px; fill: var(--sub); }
+      .src{ font-size: 10.5px; fill: var(--sub); }
+      .lead{ font-size: 11px; fill: var(--sub); letter-spacing: .12em; }
+      .link{ fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; }
+      .head{ fill: var(--accent); }
+      .dot{ fill: var(--accent); }
+    ]]></style>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#0f2233" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="680"/>
+
+  <text class="lead" x="32" y="34">Judgment Pipeline · all_round()</text>
+  <text x="32" y="20" style="font-size:15px;font-weight:600">声 音 判 定 流 程</text>
+
+  <!-- ① -->
+  <rect class="card" x="32" y="72" width="836" height="72" rx="12" filter="url(#sh)"/>
+  <circle class="badge" cx="62" cy="108" r="14"/>
+  <text class="bnum" x="62" y="114" text-anchor="middle">1</text>
+  <text class="main" x="94" y="102">取一次声音采样</text>
+  <text class="sub" x="94" y="124">RawSound = AD_Value[0]（PA0 通道，由 ADC1 + DMA1 循环搬运）</text>
+  <text class="src" x="844" y="114" text-anchor="end">Hardware/AD.c</text>
+
+  <path class="link" d="M62 144 V160"/>
+  <polygon class="head" points="62,168 57.5,159 66.5,159"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M62 146 L62 166" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.8;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ② -->
+  <rect class="card" x="32" y="168" width="836" height="72" rx="12" filter="url(#sh)"/>
+  <circle class="badge" cx="62" cy="204" r="14"/>
+  <text class="bnum" x="62" y="210" text-anchor="middle">2</text>
+  <text class="main" x="94" y="198">按阈值等级算出门槛</text>
+  <text class="sub" x="94" y="220">final_thresh = 2000 +（阈值等级 − 1）× 120  →  2000 ~ 3080（等级 1 ~ 10）</text>
+  <text class="src" x="844" y="210" text-anchor="end">设置界面 → 阈值设置</text>
+
+  <path class="link" d="M62 240 V256"/>
+  <polygon class="head" points="62,264 57.5,255 66.5,255"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M62 242 L62 262" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.8;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ③ -->
+  <rect class="card" x="32" y="264" width="836" height="72" rx="12" filter="url(#sh)"/>
+  <circle class="badge" cx="62" cy="300" r="14"/>
+  <text class="bnum" x="62" y="306" text-anchor="middle">3</text>
+  <text class="main" x="94" y="294">剔除忽略区间</text>
+  <text class="sub" x="94" y="316">采样值落在 1763 ~ 2400 之间时不计为有效，其余且 ≥ 门槛才算有效</text>
+  <text class="src" x="844" y="306" text-anchor="end">tran.c 常量 IGNORE_MIN / MAX</text>
+
+  <path class="link" d="M62 336 V352"/>
+  <polygon class="head" points="62,360 57.5,351 66.5,351"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M62 338 L62 358" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.8;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ④ -->
+  <rect class="card" x="32" y="360" width="836" height="72" rx="12" filter="url(#sh)"/>
+  <circle class="badge" cx="62" cy="396" r="14"/>
+  <text class="bnum" x="62" y="402" text-anchor="middle">4</text>
+  <text class="main" x="94" y="390">环形滑窗统计有效占比</text>
+  <text class="sub" x="94" y="412">窗口长度 250 ~ 25 点（灵敏度 1 ~ 10），占比超过 20 % 才认为「有声音」</text>
+  <text class="src" x="844" y="402" text-anchor="end">设置界面 → 灵敏度</text>
+
+  <path class="link" d="M62 432 V448"/>
+  <polygon class="head" points="62,456 57.5,447 66.5,447"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M62 434 L62 454" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.8;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ⑤ -->
+  <rect class="card" x="32" y="456" width="836" height="72" rx="12" filter="url(#sh)"/>
+  <circle class="badge" cx="62" cy="492" r="14"/>
+  <text class="bnum" x="62" y="498" text-anchor="middle">5</text>
+  <text class="main" x="94" y="486">结合总开关与工作模式决策</text>
+  <text class="sub" x="94" y="508">总开关关闭 → 一律关闭；开启时：模式「常开」一直输出，模式「声控」跟随占比开关</text>
+  <text class="src" x="844" y="498" text-anchor="end">设置界面 → 模式选择 / 主界面 Key2</text>
+
+  <path class="link" d="M62 528 V544"/>
+  <polygon class="head" points="62,552 57.5,543 66.5,543"/>
+  <circle class="dot" r="3.2">
+    <animateMotion path="M62 530 L62 550" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.2;0.8;1" dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ⑥ -->
+  <rect class="card" x="32" y="552" width="836" height="72" rx="12" filter="url(#sh)"/>
+  <circle class="badge" cx="62" cy="588" r="14"/>
+  <text class="bnum" x="62" y="594" text-anchor="middle">6</text>
+  <text class="main" x="94" y="582">控制 PWM 输出</text>
+  <text class="sub" x="94" y="604">PWM_Enable(1 / 0)  →  PA2（CH3 正向）/ PA3（CH4 互补）→ H 桥</text>
+  <text class="src" x="844" y="594" text-anchor="end">Hardware/tran.c · PWM_Enable()</text>
+
+  <text class="sub" x="32" y="656">主循环每轮调用一次 all_round()；自适应背景值仍在自动模式下平滑维护，但当前判定链使用的是固定阈值</text>
+</svg>

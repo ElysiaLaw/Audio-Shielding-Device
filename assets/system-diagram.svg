@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" width="900" height="680" role="img"
+     aria-label="系统框图：麦克风与温湿度经 ADC、软件 I2C 接入 STM32F103，主控经 TIM2 双通道 PWM 驱动 H 桥推动超声波换能器阵列；另有 555 定时器经音频调制的独立模拟支路">
+  <defs>
+    <style><![CDATA[
+      :root{
+        --bg:#f7f9fc; --card:#ffffff; --line:#dbe3ec; --ink:#1f2d3a; --sub:#6b7a8d;
+        --accent:#2f9e8f; --accent-soft:#e8f5f2; --warm:#e0912f; --warm-soft:#fdf4e6;
+      }
+      @media (prefers-color-scheme: dark){
+        :root{
+          --bg:#141a21; --card:#1c2530; --line:#2c3a48; --ink:#e6edf3; --sub:#8b9bab;
+          --accent:#4fc3b0; --accent-soft:#1b3330; --warm:#e8a94a; --warm-soft:#33291a;
+        }
+      }
+      text{ font-family: system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; fill: var(--ink); }
+      .mono{ font-family: ui-monospace,SFMono-Regular,Consolas,"Cascadia Mono","Microsoft YaHei",monospace; }
+      .bg{ fill: var(--bg); }
+      .card{ fill: var(--card); stroke: var(--line); stroke-width: 1; }
+      .box{ fill: var(--accent-soft); }
+      .name{ font-size: 17px; font-weight: 600; }
+      .name-sm{ font-size: 15px; font-weight: 600; }
+      .cap{ font-size: 11px; fill: var(--sub); }
+      .note{ font-size: 13px; }
+      .tiny{ font-size: 10px; fill: var(--sub); }
+      .lead{ font-size: 11px; fill: var(--sub); letter-spacing: .12em; }
+      .link{ fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .link-w{ fill: none; stroke: var(--warm); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 6 5; }
+      .dash{ fill: none; stroke: var(--sub); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 3 4; }
+      .head{ fill: var(--accent); }
+      .head-w{ fill: var(--warm); }
+      .dot{ fill: var(--accent); }
+      .dot-w{ fill: var(--warm); }
+      .wave{ fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round;
+             animation: ripple 2.4s ease-in-out infinite; }
+      .wave2{ animation-delay: .8s; }
+      .wave3{ animation-delay: 1.6s; }
+      @keyframes ripple{ 0%{opacity:0} 30%{opacity:1} 100%{opacity:0} }
+    ]]></style>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#0f2233" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="900" height="680"/>
+
+  <text class="lead" x="32" y="34">System Overview</text>
+  <text x="32" y="20" style="font-size:15px;font-weight:600">系 统 框 图</text>
+
+  <!-- ==================== 输入侧 ==================== -->
+
+  <rect class="card" x="32" y="70" width="130" height="72" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="97" y="100" text-anchor="middle">麦克风</text>
+  <text class="tiny" x="97" y="120" text-anchor="middle">PA0 模拟输入</text>
+
+  <rect class="card" x="32" y="162" width="130" height="72" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="97" y="192" text-anchor="middle">AHT20</text>
+  <text class="tiny" x="97" y="212" text-anchor="middle">温湿度 · PA11/PA12</text>
+
+  <rect class="card" x="32" y="254" width="130" height="72" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="97" y="284" text-anchor="middle">按键 ×3</text>
+  <text class="tiny" x="97" y="304" text-anchor="middle">PB0 · PA6 · PA4</text>
+
+  <rect class="card" x="32" y="346" width="130" height="72" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="97" y="376" text-anchor="middle">OLED</text>
+  <text class="tiny" x="97" y="396" text-anchor="middle">128×64 · PB8/PB9</text>
+
+  <!-- 输入 -> 主控 -->
+  <path class="link" d="M162 106 H200"/>
+  <polygon class="head" points="210,106 200,101.5 200,110.5"/>
+  <circle class="dot" r="3.5">
+    <animateMotion path="M162 106 L210 106" dur="1.4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.4s" repeatCount="indefinite"/>
+  </circle>
+
+  <path class="link" d="M162 198 H200"/>
+  <polygon class="head" points="210,198 200,193.5 200,202.5"/>
+  <circle class="dot" r="3.5">
+    <animateMotion path="M162 198 L210 198" dur="1.9s" repeatCount="indefinite" begin="0.6s"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.9s" repeatCount="indefinite" begin="0.6s"/>
+  </circle>
+
+  <path class="link" d="M162 290 H200"/>
+  <polygon class="head" points="210,290 200,285.5 200,294.5"/>
+
+  <!-- 主控 -> OLED -->
+  <path class="dash" d="M210 382 H170"/>
+  <polygon fill="var(--sub)" points="162,382 172,377.5 172,386.5"/>
+
+  <!-- ==================== 主控 ==================== -->
+
+  <rect class="card" x="210" y="60" width="340" height="380" rx="16" filter="url(#sh)"/>
+  <text class="name-sm" x="226" y="90">STM32F103</text>
+  <text class="tiny" x="534" y="90" text-anchor="end">72 MHz</text>
+
+  <rect class="box" x="226" y="102" width="308" height="38" rx="9"/>
+  <text class="note" x="240" y="126">① ADC1 + DMA1</text>
+  <text class="tiny" x="520" y="126" text-anchor="end">PA0 声音 / PA1</text>
+
+  <rect class="box" x="226" y="152" width="308" height="38" rx="9"/>
+  <text class="note" x="240" y="176">② TIM2 双通道 PWM</text>
+  <text class="tiny" x="520" y="176" text-anchor="end">PA2 / PA3 · 40 kHz</text>
+
+  <rect class="box" x="226" y="202" width="308" height="38" rx="9"/>
+  <text class="note" x="240" y="226">③ TIM3 采集节拍</text>
+  <text class="tiny" x="520" y="226" text-anchor="end">80 ms 中断</text>
+
+  <rect class="box" x="226" y="252" width="308" height="38" rx="9"/>
+  <text class="note" x="240" y="276">④ TIM1 定时基准</text>
+  <text class="tiny" x="520" y="276" text-anchor="end">0.1 ms 步进</text>
+
+  <rect class="box" x="226" y="302" width="308" height="38" rx="9"/>
+  <text class="note" x="240" y="326">⑤ 软件 I2C</text>
+  <text class="tiny" x="520" y="326" text-anchor="end">OLED · AHT20</text>
+
+  <rect class="box" x="226" y="352" width="308" height="38" rx="9"/>
+  <text class="note" x="240" y="376">⑥ USART1 · AT 指令</text>
+  <text class="tiny" x="520" y="376" text-anchor="end">115200 · ESP8266</text>
+
+  <text class="cap" x="226" y="416">主循环：面板状态机 + all_round() 判定</text>
+
+  <!-- ==================== 输出侧 ==================== -->
+
+  <path class="link" d="M550 138 H580"/>
+  <polygon class="head" points="590,138 580,133.5 580,142.5"/>
+  <circle class="dot" r="3.5">
+    <animateMotion path="M550 138 L590 138" dur="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1s" repeatCount="indefinite"/>
+  </circle>
+
+  <rect class="card" x="590" y="100" width="200" height="76" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="690" y="130" text-anchor="middle">H 桥 · 功率驱动</text>
+  <text class="cap" x="690" y="152" text-anchor="middle">将 PWM 变为大功率信号</text>
+
+  <path class="link" d="M690 176 V230"/>
+  <polygon class="head" points="690,240 685.5,230 694.5,230"/>
+  <circle class="dot" r="3.5">
+    <animateMotion path="M690 176 L690 240" dur="1.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+
+  <rect class="card" x="590" y="240" width="200" height="180" rx="14" filter="url(#sh)"/>
+  <path class="wave" d="M712 296 a15 15 0 0 1 0 22"/>
+  <path class="wave wave2" d="M712 316 a29 29 0 0 1 0 22"/>
+  <path class="wave wave3" d="M712 336 a43 43 0 0 1 0 22"/>
+  <circle cx="700" cy="317" r="5" fill="var(--accent)"/>
+  <text class="name" x="690" y="386" text-anchor="middle">超声波换能器阵列</text>
+  <text class="cap" x="690" y="406" text-anchor="middle">产生高频噪声</text>
+
+  <!-- ==================== 555 模拟支路 ==================== -->
+
+  <rect class="card" x="32" y="490" width="150" height="76" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="107" y="520" text-anchor="middle">555 定时器</text>
+  <text class="cap" x="107" y="542" text-anchor="middle">产生高频方波</text>
+
+  <path class="link-w" d="M182 528 H190"/>
+  <polygon class="head-w" points="200,528 190,523.5 190,532.5"/>
+
+  <rect class="card" x="200" y="490" width="180" height="76" rx="12" filter="url(#sh)"/>
+  <text class="name-sm" x="290" y="520" text-anchor="middle">音频调制</text>
+  <text class="cap" x="290" y="542" text-anchor="middle">可放出对应歌曲</text>
+
+  <path class="link-w" d="M380 528 H690 V430"/>
+  <polygon class="head-w" points="690,420 685.5,430 694.5,430"/>
+  <circle class="dot-w" r="3.5">
+    <animateMotion path="M380 528 H690 V420" dur="4.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.08;0.92;1" dur="4.5s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ==================== 图例 ==================== -->
+
+  <path class="link" d="M32 620 H74"/>
+  <text class="cap" x="86" y="624">数字路径 · 单片机主控</text>
+
+  <path class="link-w" d="M320 620 H362"/>
+  <text class="cap" x="374" y="624">模拟路径 · 555 独立支路</text>
+
+  <path class="dash" d="M620 620 H662"/>
+  <text class="cap" x="674" y="624">状态输出 · 单向显示</text>
+</svg>
